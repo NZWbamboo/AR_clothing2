@@ -91,7 +91,11 @@ MonoBehaviour:
   m_MinSize: {x: 917, y: 442}
   m_MaxSize: {x: 22012, y: 10021}
   vertical: 0
+<<<<<<< HEAD
   controlID: 9
+=======
+  controlID: 21
+>>>>>>> parent of 933e84d... Revert "sixcube"
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -135,7 +139,11 @@ MonoBehaviour:
   m_MinSize: {x: 202, y: 442}
   m_MaxSize: {x: 4002, y: 8042}
   vertical: 1
+<<<<<<< HEAD
   controlID: 10
+=======
+  controlID: 22
+>>>>>>> parent of 933e84d... Revert "sixcube"
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -394,9 +402,15 @@ MonoBehaviour:
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
+<<<<<<< HEAD
     m_SelectedIDs: b8240000
     m_LastClickedID: 9400
     m_ExpandedIDs: 00000000b8240000ffffff7f
+=======
+    m_SelectedIDs: b6240000
+    m_LastClickedID: 9398
+    m_ExpandedIDs: 00000000b6240000ffffff7f
+>>>>>>> parent of 933e84d... Revert "sixcube"
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -424,7 +438,11 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
+<<<<<<< HEAD
     m_ExpandedIDs: 00000000b8240000
+=======
+    m_ExpandedIDs: 00000000b6240000
+>>>>>>> parent of 933e84d... Revert "sixcube"
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -616,9 +634,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
   m_Size:
-    m_Target: 10
+    m_Target: 19.352823
     speed: 2
-    m_Value: 10
+    m_Value: 19.352823
   m_Ortho:
     m_Target: 0
     speed: 2
