@@ -1,0 +1,6 @@
+﻿{
+	"URL1": "http://gec2018.gpossible.com/ai/api/getnowingplayingscreen?screenid=p000001",
+	"说明1": "获取用户操作",
+	"tip": true,
+	"说明2": "true为打开调试文字,false为关闭调试文字"
+}

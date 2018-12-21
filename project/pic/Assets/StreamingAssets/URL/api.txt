@@ -1,0 +1,81 @@
+﻿测试拍照-虚拟拍照
+API
+1.获取初始化数据（微信二维码) 获取扫码的二维码
+
+    地址: http://app.maymotion.com/open/wx6be19a2d21b2d544/zltp/api.php
+    参数:
+        GET api = get_init_data
+    返回:
+        正确
+        {
+            "err":0,
+            "msg":"xxx"
+        }
+        错误
+        {
+            "err":0,
+            "msg":"https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQFM8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyTlhUOWN5aUVhaVAxaE5RN3hxMTgAAgRxpx9aAwQAjScA"
+        }
+2.获取当前参与用户信息（有且只有一个）
+    地址: http://app.maymotion.com/open/wx6be19a2d21b2d544/zltp/api.php
+    参数:
+        GET api = get_user_data
+    返回:
+        正确
+        {
+            "err":0,
+            "msg":"2"   // id = 2
+        }
+        错误
+        {
+            "err":1,
+            "msg":"parameter api is empty."
+        }
+3.上传图片
+    地址: http://app.maymotion.com/open/wx6be19a2d21b2d544/zltp/api.php
+    参数:
+        GET  api = upl_user_photo
+        POST id  = 2    // 2中获取的id
+        POST photo (图片文件)
+    返回:
+        正确
+        {
+            "err":0,
+            "msg":"http://app.maymotion.com/open/wx6be19a2d21b2d544/zltp/photo.php?id=20170527111452"
+        }
+        错误
+        {
+            "err":1,
+            "msg":"parameter api is empty."
+        }
+4.获取打印信息
+    地址: http://app.maymotion.com/open/wx6be19a2d21b2d544/zltp/api.php
+    参数:
+        GET api  = get_print_data
+        POST id  = 2
+    返回:
+        正确
+        {
+            "err":0,
+            "msg":"success."
+        }
+        错误
+        {
+            "err":1,
+            "msg":"parameter api is empty."
+        }  
+5.清理当前用户（用于程序启动时清理异常数据）
+    地址: http://app.maymotion.com/open/wx6be19a2d21b2d544/zltp/api.php
+    参数:
+        GET api = cle_user_data
+    返回:
+        正确
+        {
+            "err":0,
+            "msg":"success."
+        }
+        错误
+        {
+            "err":1,
+            "msg":"parameter api is empty."
+        }

@@ -94,7 +94,11 @@ MonoBehaviour:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   controlID: 9
+=======
+  controlID: 21
+>>>>>>> parent of 933e84d... Revert "sixcube"
 =======
   controlID: 21
 >>>>>>> parent of 933e84d... Revert "sixcube"
@@ -150,7 +154,11 @@ MonoBehaviour:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   controlID: 10
+=======
+  controlID: 22
+>>>>>>> parent of 933e84d... Revert "sixcube"
 =======
   controlID: 22
 >>>>>>> parent of 933e84d... Revert "sixcube"
@@ -421,9 +429,15 @@ MonoBehaviour:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     m_SelectedIDs: b8240000
     m_LastClickedID: 9400
     m_ExpandedIDs: 00000000b8240000ffffff7f
+=======
+    m_SelectedIDs: b6240000
+    m_LastClickedID: 9398
+    m_ExpandedIDs: 00000000b6240000ffffff7f
+>>>>>>> parent of 933e84d... Revert "sixcube"
 =======
     m_SelectedIDs: b6240000
     m_LastClickedID: 9398
@@ -469,7 +483,11 @@ MonoBehaviour:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     m_ExpandedIDs: 00000000b8240000
+=======
+    m_ExpandedIDs: 00000000b6240000
+>>>>>>> parent of 933e84d... Revert "sixcube"
 =======
     m_ExpandedIDs: 00000000b6240000
 >>>>>>> parent of 933e84d... Revert "sixcube"
