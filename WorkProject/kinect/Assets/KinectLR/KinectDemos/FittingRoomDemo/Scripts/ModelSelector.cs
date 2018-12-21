@@ -73,7 +73,7 @@ public class ModelSelector : MonoBehaviour
 
 
     [HideInInspector]
-    public bool activeSelector = false;
+    public bool activeSelector = true;
 
     //	[Tooltip("GUI-Text to display the avatar-scaler debug messages.")]
     //	public GUIText debugText;
@@ -233,7 +233,7 @@ public class ModelSelector : MonoBehaviour
                 modelThumbs[i] = CreatePreviewTexture(resPreview != null ? resPreview.bytes : null);//创建贴图
             }
 
-            InstantiateDressingItem(i);//实例化菜单
+            //InstantiateDressingItem(i);//实例化菜单
         }
 
         // select the 1st item
@@ -256,14 +256,16 @@ public class ModelSelector : MonoBehaviour
 
     void Update()
     {
+        Debug.LogError(activeSelector);
         // check for selection change
         //检查选择更改
-        if (activeSelector && selected >= 0 && selected < modelNames.Length && prevSelected != selected)//当上一个索引不等于当前索引时
+        if ( selected >= 0 && selected < modelNames.Length && prevSelected != selected)//当上一个索引不等于当前索引时activeSelector &&
         {
             KinectManager kinectManager = KinectManager.Instance;
-
+         
             if (kinectManager && kinectManager.IsInitialized() && kinectManager.IsUserDetected(playerIndex))
             {
+                Debug.LogError("加载模型");
                 OnDressingItemSelected(selected);
             }
         }
@@ -391,8 +393,8 @@ public class ModelSelector : MonoBehaviour
             ac.mirroredMovement = true;
             ac.verticalMovement = true;
 
-            ac.verticalOffset = verticalOffset - 0.088F;
-            ac.forwardOffset = forwardOffset + 0.128f;
+            ac.verticalOffset = verticalOffset ;
+            ac.forwardOffset = forwardOffset ;
             ac.smoothFactor = 0f;
         }
 
