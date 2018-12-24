@@ -11,8 +11,8 @@ public class ModelSelector : MonoBehaviour
     [Tooltip("Index of the player, tracked by this component. 0 means the 1st player, 1 - the 2nd one, 2 - the 3rd one, etc.")]
     public int playerIndex = 0;
     //模型的加载文件夹
-    [Tooltip("The model category. Used for model discovery and title of the category menu.")]
-    public string modelCategory = "Clothing";
+   // [Tooltip("The model category. Used for model discovery and title of the category menu.")]
+  //  public string modelCategory = "Clothing";
     //现有的服装模特总数
     [Tooltip("Total number of the available clothing models.")]
     public int numberOfModels = 3;
@@ -113,17 +113,15 @@ public class ModelSelector : MonoBehaviour
     /// <param name="bActive">If set to <c>true</c> b active.</param>
     public void SetActiveSelector(bool bActive)
     {
-        activeSelector = bActive;
-
-        if (dressingMenu) //将衣物选择菜单与选择器关联
-        {
-            dressingMenu.gameObject.SetActive(activeSelector);
-        }
-
-        if (!activeSelector && !keepSelectedModel) //当选择器切换且不保存选择模型时
-        {
-            DestroySelectedModel();//
-        }
+        //activeSelector = bActive;
+        //if (dressingMenu) //将衣物选择菜单与选择器关联
+        //{
+        //    dressingMenu.gameObject.SetActive(activeSelector);
+        //}
+        //if (!activeSelector && !keepSelectedModel) //当选择器切换且不保存选择模型时
+        //{
+        //    DestroySelectedModel();//
+        //}
     }
 
 
@@ -166,87 +164,33 @@ public class ModelSelector : MonoBehaviour
     /// 选择下一个模型
     /// Selects the next model.
     /// </summary>
-    public void SelectNextModel()
+    public void SelectNextModel(string modelClass)
     {
         selected++;//令选中的索引加一
         if (selected >= numberOfModels)
             selected = 0;//如果超出索引则循环
 
-        //LoadModel(modelNames[selected]);
-        OnDressingItemSelected(selected);
+        OnDressingItemSelected(selected, modelClass);
     }
 
     /// <summary>
     /// Selects the previous model.
     /// </summary>
-    public void SelectPrevModel()
+    public void SelectPrevModel(string modelClass)
     {
         selected--;
         if (selected < 0)
             selected = numberOfModels - 1;
 
-        //LoadModel(modelNames[selected]);
-        OnDressingItemSelected(selected);
+        OnDressingItemSelected(selected, modelClass);
     }
 
 
     void Start()
     {
-        // get references to menu title and content
-        //获取对标题菜单和内容的引用
-        if (dressingMenu)
-        {
-            Transform dressingHeaderText = dressingMenu.transform.Find("Header/Text");
-            if (dressingHeaderText)
-            {
-                dressingMenuTitle = dressingHeaderText.gameObject.GetComponent<Text>();
-            }
-
-            Transform dressingViewportContent = dressingMenu.transform.Find("Scroll View/Viewport/Content");
-            if (dressingViewportContent)
-            {
-                dressingMenuContent = dressingViewportContent.gameObject.GetComponent<RectTransform>();
-            }
-        }
-
         // create model names and thumbs
-        modelNames = new string[numberOfModels];//创建的模型名称数组数量
-        modelThumbs = new Texture2D[numberOfModels];//制定贴图数量
-        dressingPanels.Clear();
-
-        // instantiate menu items
-        //实例化菜单列表
-        for (int i = 0; i < numberOfModels; i++)
-        {
-            modelNames[i] = string.Format("{0:0000}", i);
-
-            string previewPath = modelCategory + "/" + modelNames[i] + "/preview.jpg";
-            TextAsset resPreview = Resources.Load(previewPath, typeof(TextAsset)) as TextAsset;
-
-            if (resPreview == null)
-            {
-                resPreview = Resources.Load("nopreview.jpg", typeof(TextAsset)) as TextAsset;
-            }
-
-            //if(resPreview != null)
-            {
-                modelThumbs[i] = CreatePreviewTexture(resPreview != null ? resPreview.bytes : null);//创建贴图
-            }
-
-            //InstantiateDressingItem(i);//实例化菜单
-        }
-
-        // select the 1st item
-        if (numberOfModels > 0)
-        {
-            selected = 0;
-        }
-
-        // set the panel title
-        if (dressingMenuTitle)
-        {
-            dressingMenuTitle.text = modelCategory;//设置菜单标题名等于加载文件夹名
-        }
+      //  modelNames = new string[numberOfModels];//创建的模型名称数组数量
+       // modelThumbs = new Texture2D[numberOfModels];//制定贴图数量
 
         // save current scale factors and model offsets
         //保存当前的缩放因子和偏移量
@@ -256,19 +200,18 @@ public class ModelSelector : MonoBehaviour
 
     void Update()
     {
-        Debug.LogError(activeSelector);
         // check for selection change
         //检查选择更改
-        if ( selected >= 0 && selected < modelNames.Length && prevSelected != selected)//当上一个索引不等于当前索引时activeSelector &&
-        {
-            KinectManager kinectManager = KinectManager.Instance;
-         
-            if (kinectManager && kinectManager.IsInitialized() && kinectManager.IsUserDetected(playerIndex))
-            {
-                Debug.LogError("加载模型");
-                OnDressingItemSelected(selected);
-            }
-        }
+        //if (selected >= 0  && prevSelected != selected)//当上一个索引不等于当前索引时activeSelector &&
+        //{
+        //    KinectManager kinectManager = KinectManager.Instance;
+
+        //    if (kinectManager && kinectManager.IsInitialized() && kinectManager.IsUserDetected(playerIndex))
+        //    {
+        //        Debug.LogError("加载模型");
+        //        OnDressingItemSelected(selected, "man");
+        //    }
+        //}
 
         if (selModel != null)
         {
@@ -303,74 +246,32 @@ public class ModelSelector : MonoBehaviour
             }
         }
     }
-    // creates preview texture
-    private Texture2D CreatePreviewTexture(byte[] btImage)
-    {
-        Texture2D tex = new Texture2D(4, 4);
-        //Texture2D tex = new Texture2D(100, 143);
-
-        if (btImage != null)
-        {
-            tex.LoadImage(btImage);
-        }
-
-        return tex;
-    }
-
-    // instantiates dressing menu item
-    //实例化穿衣菜单
-    private void InstantiateDressingItem(int i)
-    {
-        if (!dressingItemPrefab && i >= 0 && i < numberOfModels)
-            return;
-
-        GameObject dressingItemInstance = Instantiate<GameObject>(dressingItemPrefab);
-
-        GameObject dressingImageObj = dressingItemInstance.transform.Find("DressingImagePanel").gameObject;
-        dressingImageObj.GetComponentInChildren<RawImage>().texture = modelThumbs[i];
-
-        if (!string.IsNullOrEmpty(modelNames[i]))
-        {
-            EventTrigger trigger = dressingItemInstance.GetComponent<EventTrigger>();
-            EventTrigger.Entry entry = new EventTrigger.Entry();
-
-            entry.eventID = EventTriggerType.Select;
-            entry.callback.AddListener((eventData) => { OnDressingItemSelected(i); });
-
-            trigger.triggers.Add(entry);
-        }
-
-        if (dressingMenuContent)
-        {
-            dressingItemInstance.transform.SetParent(dressingMenuContent, false);
-        }
-
-        dressingPanels.Add(dressingItemInstance);
-    }
 
     // invoked when dressing menu-item was clicked
     /// <summary>
     /// invoked when dressing menu-item was clicked
     /// 根据索引加载模型
     /// </summary>
-    /// <param name="i"></param>
-    private void OnDressingItemSelected(int i)
+    /// <param name="i">模型文件夹索引</param>
+    /// <param name="modelClass">文件夹名</param>
+    public void OnDressingItemSelected(int i, string modelClass)
     {
-        if (i >= 0 && i < modelNames.Length && prevSelected != i)
+       // if (i >= 0 && i < modelNames.Length && prevSelected != i)
         {
-            prevSelected = selected = i;
-            LoadDressingModel(modelNames[selected]);
+            //prevSelected = selected = i;
+            LoadDressingModel(string.Format("{0:0000}", i), modelClass);
         }
     }
 
     // sets the selected dressing model as user avatar
     //设置所选模型打扮成用户化身
-    private void LoadDressingModel(string modelDir)
+    private void LoadDressingModel(string modelDir, string modelCategory)
     {
-        string modelPath = modelCategory + "/" + modelDir + "/model";
+        string modelPath = "Models"+"/"+modelCategory + "/" + modelDir + "/model";
+        Debug.LogWarning(modelPath);
         UnityEngine.Object modelPrefab = Resources.Load(modelPath, typeof(GameObject));//加载模型
                                                                                        //   modelPrefab = null;
-        Debug.Log("Model: 不加载模型" + modelPath);
+        Debug.Log("Model: 加载模型" + modelDir + modelCategory);
         if (modelPrefab == null)
             return;
 
@@ -393,8 +294,8 @@ public class ModelSelector : MonoBehaviour
             ac.mirroredMovement = true;
             ac.verticalMovement = true;
 
-            ac.verticalOffset = verticalOffset ;
-            ac.forwardOffset = forwardOffset ;
+            ac.verticalOffset = verticalOffset;
+            ac.forwardOffset = forwardOffset;
             ac.smoothFactor = 0f;
         }
 

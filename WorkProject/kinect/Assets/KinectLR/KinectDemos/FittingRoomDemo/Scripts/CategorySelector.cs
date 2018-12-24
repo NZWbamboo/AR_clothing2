@@ -60,7 +60,7 @@ public class CategorySelector : MonoBehaviour, KinectGestures.GestureListenerInt
 			modelSelector = allModelSelectors [iCurSelector];
 			modelSelector.SetActiveSelector(true);
 
-			Debug.Log("Category: " + modelSelector.modelCategory);
+			//Debug.Log("Category: " + modelSelector.modelCategory);
 		}
 	}
 
@@ -82,7 +82,7 @@ public class CategorySelector : MonoBehaviour, KinectGestures.GestureListenerInt
 			modelSelector = allModelSelectors [iCurSelector];
 			modelSelector.SetActiveSelector(true);
 
-			Debug.Log("Category: " + modelSelector.modelCategory);
+			//Debug.Log("Category: " + modelSelector.modelCategory);
 		}
 	}
 
@@ -155,7 +155,7 @@ public class CategorySelector : MonoBehaviour, KinectGestures.GestureListenerInt
 			modelSelector = allModelSelectors[iCurSelector];
 			modelSelector.SetActiveSelector(true);
 
-			Debug.Log("Category: " + modelSelector.modelCategory);
+		//	Debug.Log("Category: " + modelSelector.modelCategory);
 		}
 
 	}
@@ -288,13 +288,13 @@ public class CategorySelector : MonoBehaviour, KinectGestures.GestureListenerInt
 		case KinectGestures.Gestures.SwipeLeft:
 			if (modelSelector) 
 			{
-				modelSelector.SelectNextModel();
+				//modelSelector.SelectNextModel();
 			}
 			break;
 		case KinectGestures.Gestures.SwipeRight:
 			if (modelSelector) 
 			{
-				modelSelector.SelectPrevModel();
+				//modelSelector.SelectPrevModel();
 			}
 			break;
 		}
