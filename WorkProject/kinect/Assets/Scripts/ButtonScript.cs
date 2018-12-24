@@ -12,9 +12,11 @@ public class ButtonScript : MonoBehaviour
     public int UPorDOWN;
     public ColthingControler instence;
     int clothinIndex;
+    ParticleSystem toonMacige;
     // Use this for initialization
     void Start()
     {
+        toonMacige = transform.parent.parent.Find("ToonMagic").GetComponent<ParticleSystem>();
         KinectManager KM = KinectManager.Instance;
         modelSelector = KM.gameObject.GetComponent<ModelSelector>();
         this.transform.GetChild(2).GetComponent<Toggle>().onValueChanged.AddListener((ison) => { Selected(ison); });
@@ -39,7 +41,9 @@ public class ButtonScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
+        this.transform.GetChild(0).localScale = new Vector3(1.3f, 1.3f, 1);
+        this.transform.GetChild(1).localScale = new Vector3(1.5f, 1.5f, 1);
+        this.transform.GetChild(3).localScale = new Vector3(1.5f, 1.5f, 1);
         time = 0;
     }
     public string fileName;                  //模型的文件夹
@@ -48,12 +52,11 @@ public class ButtonScript : MonoBehaviour
     private static int selectorcount;               //当前选择的模型的最大数量
     private static string selector;                 //当前选择的模型列表
     private int modelIndex;                  //模型索引
-    
+
     private void OnTriggerStay2D(Collider2D collision)
     {
-        this.transform.GetChild(0).localScale = new Vector3(1.3f, 1.3f, 1);
-        this.transform.GetChild(1).localScale = new Vector3(1.5f, 1.5f, 1);
-        this.transform.GetChild(3).localScale = new Vector3(1.5f, 1.5f, 1);
+        toonMacige.Stop();
+     
         switch (Clothing_categories)
         {
             case 0://男
@@ -61,20 +64,25 @@ public class ButtonScript : MonoBehaviour
             case 1://女
 
             case 2://卡通
-                selector = fileName;         //令当前选择的模型列表为选中的文件夹里的内容
-                selectorcount = mouldCount;  //令当前选择的模型列表的最大数量为选中种类的最大数量
-                Debug.LogError(selectorcount);
+              
                 if (this.transform.GetChild(2).GetComponent<Toggle>().isOn)
                 {
                     return;
                 }
-               
+
                 time += Time.deltaTime;
                 this.transform.GetChild(1).GetComponent<Image>().enabled = true;
                 this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = time * 0.5f;
 
                 if (time > 2)
                 {
+                    selector = fileName;         //令当前选择的模型列表为选中的文件夹里的内容
+                    selectorcount = mouldCount;  //令当前选择的模型列表的最大数量为选中种类的最大数量
+                    Debug.LogError(selectorcount);
+                    toonMacige.Play();
+                    this.transform.GetChild(0).transform.localScale = Vector3.one;
+                    this.transform.GetChild(1).transform.localScale = Vector3.one;
+                    this.transform.GetChild(3).transform.localScale = Vector3.one;
                     this.transform.GetChild(2).GetComponent<Toggle>().isOn = true;
                     this.transform.GetChild(1).GetComponent<Image>().enabled = false;
                     this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 0;
@@ -92,6 +100,10 @@ public class ButtonScript : MonoBehaviour
                 this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = time * 0.5f;
                 if (time > 2)
                 {
+                    toonMacige.Play();
+                    this.transform.GetChild(0).transform.localScale = Vector3.one;
+                    this.transform.GetChild(1).transform.localScale = Vector3.one;
+                    this.transform.GetChild(3).transform.localScale = Vector3.one;
                     this.transform.GetChild(2).GetComponent<Toggle>().isOn = true;
                     this.transform.GetChild(1).GetComponent<Image>().enabled = false;
                     this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 0;
@@ -104,7 +116,7 @@ public class ButtonScript : MonoBehaviour
                                        //   LoadNextModel(modelIndex,selector);
                                        //  clothingImage.sprite = instence.ColthingSprite[Mathf.Abs(Clothing_categories) % 3];
                                        //  clothinIndex = Clothing_categories;
-                    Debug.Log(modelIndex+"  "+ selectorcount);
+                    Debug.Log(modelIndex + " "+selector +" " + selectorcount);
                     modelSelector.OnDressingItemSelected(modelIndex, selector);
                 }
                 break;
@@ -114,6 +126,10 @@ public class ButtonScript : MonoBehaviour
                 this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = time * 0.5f;
                 if (time > 2)
                 {
+                    toonMacige.Play();
+                    this.transform.GetChild(0).transform.localScale = Vector3.one;
+                    this.transform.GetChild(1).transform.localScale = Vector3.one;
+                    this.transform.GetChild(3).transform.localScale = Vector3.one;
                     this.transform.GetChild(2).GetComponent<Toggle>().isOn = true;
                     this.transform.GetChild(1).GetComponent<Image>().enabled = false;
                     this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 0;
@@ -124,14 +140,14 @@ public class ButtonScript : MonoBehaviour
                         modelIndex = selectorcount - 1;
                     Debug.Log(modelIndex + "  " + selectorcount);
                     modelSelector.OnDressingItemSelected(modelIndex, selector);
-              
+
                 }
                 break;
             default:
                 break;
         }
     }
-    
+
     //private void LoadModel(int index, GameObject[] clothing)
     //{
     //    selModel = clothing[index];
@@ -146,6 +162,9 @@ public class ButtonScript : MonoBehaviour
     //}
     private void OnTriggerExit2D(Collider2D collision)
     {
+        this.transform.GetChild(0).localScale = new Vector3(1f, 1f, 1);
+        this.transform.GetChild(1).localScale = new Vector3(1f, 1f, 1);
+        this.transform.GetChild(3).localScale = new Vector3(1f, 1f, 1);
         this.transform.GetChild(1).GetComponent<Image>().enabled = false;
         this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 0;
     }

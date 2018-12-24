@@ -74,12 +74,31 @@
     <Reference Include="UnityEngine.VR">
       <HintPath>D:/Program Files/Unity5.6/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
     </Reference>
+    <Reference Include="Hayate">
+      <HintPath>Assets/Hayate/scripts/Hayate.dll</HintPath>
+    </Reference>
+    <Reference Include="LitJson">
+      <HintPath>Assets/Plugins/LitJson.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>D:/Program Files/Unity5.6/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\nanzhuang1.fbm\NewBehaviourScript.cs" />
+    <Compile Include="Assets\Elementals\Scripts\OrbitCamera.cs" />
+    <Compile Include="Assets\Elementals\Scripts\TestParticles.cs" />
+    <Compile Include="Assets\Hayate\scripts\CameraWiggle.cs" />
+    <Compile Include="Assets\Hayate\scripts\FadeIn.cs" />
+    <Compile Include="Assets\Hayate\scripts\HayateStart.cs" />
+    <Compile Include="Assets\Hayate\scripts\addRDNforce.cs" />
+    <Compile Include="Assets\Hayate\scripts\rotate.cs" />
+    <Compile Include="Assets\Hayate\scripts\scaleRotation.cs" />
+    <Compile Include="Assets\Hayate\scripts\switchTarget.cs" />
+    <Compile Include="Assets\NewBehaviourScript.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Elementals\!Readme.txt" />
+    <None Include="Assets\Toon Particles - Magic Collection\ToonMagic - Readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
