@@ -12,29 +12,43 @@ public class AvatarScaler : MonoBehaviour
 
 	[Tooltip("Whether the avatar is facing the player or not.")]
 	public bool mirroredAvatar = false;
-
+    /// <summary>
+    /// 身体比例因子（包括手臂和腿）可用于模型量表的微调。
+    /// </summary>
 	[Tooltip("Body scale factor (incl. arms and legs) that may be used for fine tuning of model-scale.")]
 	[Range(0.0f, 2.0f)]
 	public float bodyScaleFactor = 1.0f;
-
+    /// <summary>
+    /// 可用于微调模型宽度比例的体宽比例因子。
+    /// </summary>
 	[Tooltip("Body width scale factor that may be used for fine tuning of model-width scale.")]
 	[Range(0.0f, 2.0f)]
 	public float bodyWidthFactor = 1.0f;
-
+    /// <summary>
+    /// 可用于模型臂秤微调的臂的附加比例因子。
+    /// </summary>
 	[Tooltip("Additional scale factor for arms that may be used for fine tuning of model arm-scale.")]
 	[Range(0.0f, 2.0f)]
 	public float armScaleFactor = 1.0f;
-
+    /// <summary>
+    /// 腿部的附加比例因子可用于模型腿部尺度的微调。
+    /// </summary>
 	[Tooltip("Additional scale factor for legs that may be used for fine tuning of model leg-scale.")]
 	[Range(0.0f, 2.0f)]
 	public float legScaleFactor = 1.0f;
-	
-	[Tooltip("Whether the scale is updated continuously or just after the calibration pose.")]
+    /// <summary>
+    /// 标尺是连续更新还是仅在校准姿势之后更新。
+    /// </summary>
+    [Tooltip("Whether the scale is updated continuously or just after the calibration pose.")]
 	public bool continuousScaling = true;
-	
-	[Tooltip("Scale smoothing factor used in case of continuous scaling.")]
+    /// <summary>
+    /// 在连续缩放的情况下使用的缩放平滑因子。
+    /// </summary>
+    [Tooltip("Scale smoothing factor used in case of continuous scaling.")]
 	public float smoothFactor = 5f;
-
+    /// <summary>
+    /// 可用于在背景上叠加模型的相机。
+    /// </summary>
 	[Tooltip("Camera that may be used to overlay the model over the background.")]
 	public Camera foregroundCamera;
 	

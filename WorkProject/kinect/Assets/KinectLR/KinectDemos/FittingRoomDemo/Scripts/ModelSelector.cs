@@ -10,21 +10,6 @@ public class ModelSelector : MonoBehaviour
 {
     [Tooltip("Index of the player, tracked by this component. 0 means the 1st player, 1 - the 2nd one, 2 - the 3rd one, etc.")]
     public int playerIndex = 0;
-    //模型的加载文件夹
-   // [Tooltip("The model category. Used for model discovery and title of the category menu.")]
-  //  public string modelCategory = "Clothing";
-    //现有的服装模特总数
-    [Tooltip("Total number of the available clothing models.")]
-    public int numberOfModels = 3;
-
-    //	[Tooltip("Screen x-position of the model selection window. Negative values are considered relative to the screen width.")]
-    //	public int windowScreenX = -160;
-    //参考穿着菜单。
-    [Tooltip("Reference to the dresing menu.")]
-    public RectTransform dressingMenu;
-    //菜单预制体
-    [Tooltip("Reference to the dresing menu-item prefab.")]
-    public GameObject dressingItemPrefab;
     //使初始模型相对于相机的位置，等于玩家相对于传感器的位置。
     [Tooltip("Makes the initial model position relative to this camera, to be equal to the player's position, relative to the sensor.")]
     public Camera modelRelativeToCamera = null;
@@ -75,54 +60,14 @@ public class ModelSelector : MonoBehaviour
     [HideInInspector]
     public bool activeSelector = true;
 
-    //	[Tooltip("GUI-Text to display the avatar-scaler debug messages.")]
-    //	public GUIText debugText;
-
-
-    // Reference to the dresing menu list title
-    private Text dressingMenuTitle;
-
-    // Reference to the dresing menu list content
-    private RectTransform dressingMenuContent;
-
-    // list of instantiated dressing panels
-    //修整面板列表
-    private List<GameObject> dressingPanels = new List<GameObject>();
-
-    //private Rect menuWindowRectangle;
-    private string[] modelNames;
-    private Texture2D[] modelThumbs;
-
-    private Vector2 scroll;
-    /// <summary>
-    /// 当前选择的模型的索引
-    /// </summary>
-	private int selected = -1;//当前选择的模型的索引
-    private int prevSelected = -1;//上一个模型的索引
-
     private GameObject selModel;//当前选择的模型
 
     private float curScaleFactor = 0f;
-    private float curModelOffset = 0f;
+    private float curModelOffset = 0f;       //
+    private Vector3 rightHandScreenPos;      //关节在屏幕里的位置
+    private bool LoadModel = true;           //是否自动加载模型
 
 
-    /// <summary>
-    /// 设置模型选择器是活跃的还是不活跃的
-    /// Sets the model selector to be active or inactive.
-    /// </summary>
-    /// <param name="bActive">If set to <c>true</c> b active.</param>
-    public void SetActiveSelector(bool bActive)
-    {
-        //activeSelector = bActive;
-        //if (dressingMenu) //将衣物选择菜单与选择器关联
-        //{
-        //    dressingMenu.gameObject.SetActive(activeSelector);
-        //}
-        //if (!activeSelector && !keepSelectedModel) //当选择器切换且不保存选择模型时
-        //{
-        //    DestroySelectedModel();//
-        //}
-    }
 
 
     /// <summary>
@@ -135,84 +80,56 @@ public class ModelSelector : MonoBehaviour
         return selModel;
     }
 
-
+    // invoked when dressing menu-item was clicked
     /// <summary>
-    /// 销毁当前选定的模型
-    /// Destroys the currently selected model.
+    /// invoked when dressing menu-item was clicked
+    /// 根据索引加载模型
     /// </summary>
-    public void DestroySelectedModel()
+    /// <param name="i">模型文件夹索引</param>
+    /// <param name="modelClass">文件夹名</param>
+    public void OnDressingItemSelected(int i, string modelClass)
     {
-        if (selModel)
-        {
-            AvatarController ac = selModel.GetComponent<AvatarController>();
-            KinectManager km = KinectManager.Instance;
-
-            if (ac != null && km != null)
-            {
-                km.avatarControllers.Remove(ac);//在kinectManger控制模型列表中删除
-            }
-
-            GameObject.Destroy(selModel);//将当前模型销毁
-            selModel = null;//令模型等于Null
-
-            prevSelected = -1;//令上一个选择等于-1
-        }
+        LoadDressingModel(string.Format("{0:0000}", i), modelClass);
     }
-
-
-    /// <summary>
-    /// 选择下一个模型
-    /// Selects the next model.
-    /// </summary>
-    public void SelectNextModel(string modelClass)
-    {
-        selected++;//令选中的索引加一
-        if (selected >= numberOfModels)
-            selected = 0;//如果超出索引则循环
-
-        OnDressingItemSelected(selected, modelClass);
-    }
-
-    /// <summary>
-    /// Selects the previous model.
-    /// </summary>
-    public void SelectPrevModel(string modelClass)
-    {
-        selected--;
-        if (selected < 0)
-            selected = numberOfModels - 1;
-
-        OnDressingItemSelected(selected, modelClass);
-    }
-
-
+    KinectManager kinectManager;
     void Start()
     {
-        // create model names and thumbs
-      //  modelNames = new string[numberOfModels];//创建的模型名称数组数量
-       // modelThumbs = new Texture2D[numberOfModels];//制定贴图数量
-
+        kinectManager = KinectManager.Instance;
         // save current scale factors and model offsets
         //保存当前的缩放因子和偏移量
         curScaleFactor = bodyScaleFactor + bodyWidthFactor + armScaleFactor + legScaleFactor;
         curModelOffset = verticalOffset + forwardOffset;
     }
-
+   
     void Update()
     {
-        // check for selection change
-        //检查选择更改
-        //if (selected >= 0  && prevSelected != selected)//当上一个索引不等于当前索引时activeSelector &&
-        //{
-        //    KinectManager kinectManager = KinectManager.Instance;
 
-        //    if (kinectManager && kinectManager.IsInitialized() && kinectManager.IsUserDetected(playerIndex))
-        //    {
-        //        Debug.LogError("加载模型");
-        //        OnDressingItemSelected(selected, "man");
-        //    }
-        //}
 
+        if (!GetJointOverlayScreenPos(kinectManager, (int)KinectInterop.JointType.SpineBase, ref rightHandScreenPos))//如果脊椎关节在屏幕里
+        {
+            GameObject.Destroy(selModel);
+            LoadModel = true;
+        }
+        else if (selModel == null && LoadModel)//如果
+        {
+            int selectedFileName = Random.Range(0, 3);
+            string FileName = null;
+            switch (selectedFileName)
+            {
+                case 0:
+                    FileName = "man";
+                    break;
+                case 1:
+                    FileName = "woman";
+                    break;
+                case 2:
+                    FileName = "katon";
+                    break;
+            }
+            Debug.LogError(FileName+"  自动加载模型");
+            GameObject.Find("UI-Canvas/Page/Right_Panel/UP/" + FileName).transform.GetChild(2).GetComponent<Toggle>().isOn = true;
+            LoadModel = false;
+        }
         if (selModel != null)
         {
             // update model settings as needed
@@ -247,35 +164,61 @@ public class ModelSelector : MonoBehaviour
         }
     }
 
-    // invoked when dressing menu-item was clicked
-    /// <summary>
-    /// invoked when dressing menu-item was clicked
-    /// 根据索引加载模型
-    /// </summary>
-    /// <param name="i">模型文件夹索引</param>
-    /// <param name="modelClass">文件夹名</param>
-    public void OnDressingItemSelected(int i, string modelClass)
-    {
-       // if (i >= 0 && i < modelNames.Length && prevSelected != i)
-        {
-            //prevSelected = selected = i;
-            LoadDressingModel(string.Format("{0:0000}", i), modelClass);
-        }
-    }
 
+
+    private bool GetJointOverlayScreenPos(KinectManager kinectManager, int iHandJointIndex, ref Vector3 handScreenPos)
+    {
+        Vector3 posJointRaw = kinectManager.GetJointKinectPosition(kinectManager.GetUserIdByIndex(playerIndex), iHandJointIndex);
+
+        if (posJointRaw != Vector3.zero)
+        {
+            Vector2 posDepth = kinectManager.MapSpacePointToDepthCoords(posJointRaw);
+            ushort depthValue = kinectManager.GetDepthForPixel((int)posDepth.x, (int)posDepth.y);
+
+            if (posDepth != Vector2.zero && depthValue > 0)
+            {
+                // depth pos to color pos
+                Vector2 posColor = kinectManager.MapDepthPointToColorCoords(posDepth, depthValue);
+
+                if (!float.IsInfinity(posColor.x) && !float.IsInfinity(posColor.y))
+                {
+                    // get the color image x-offset and width (use the portrait background, if available)
+                    float colorWidth = kinectManager.GetColorImageWidth();
+                    float colorOfsX = 0f;
+
+                    PortraitBackground portraitBack = PortraitBackground.Instance;
+                    if (portraitBack && portraitBack.enabled)
+                    {
+                        colorWidth = kinectManager.GetColorImageHeight() * kinectManager.GetColorImageHeight() / kinectManager.GetColorImageWidth();
+                        colorOfsX = (kinectManager.GetColorImageWidth() - colorWidth) / 2f;
+                    }
+
+                    float xScaled = (posColor.x - colorOfsX) / colorWidth;
+                    float yScaled = posColor.y / kinectManager.GetColorImageHeight();
+
+                    handScreenPos.x = xScaled;
+                    handScreenPos.y = 1f - yScaled;
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
     // sets the selected dressing model as user avatar
     //设置所选模型打扮成用户化身
     private void LoadDressingModel(string modelDir, string modelCategory)
     {
-        string modelPath = "Models"+"/"+modelCategory + "/" + modelDir + "/model";
-        Debug.LogWarning(modelPath);
+        string modelPath = "Models" + "/" + modelCategory + "/" + modelDir + "/model";
+        //  Debug.LogWarning(modelPath);
         UnityEngine.Object modelPrefab = Resources.Load(modelPath, typeof(GameObject));//加载模型
                                                                                        //   modelPrefab = null;
         Debug.Log("Model: 加载模型" + modelDir + modelCategory);
         if (modelPrefab == null)
             return;
 
-        Debug.Log("Model: " + modelPath);
+        //  Debug.Log("Model: " + modelPath);
 
         if (selModel != null)
         {
@@ -345,7 +288,7 @@ public class ModelSelector : MonoBehaviour
         scaler.foregroundCamera = foregroundCamera;
         //scaler.debugText = debugText;
 
-        //scaler.Start();
+        scaler.Start();
     }
 
 }

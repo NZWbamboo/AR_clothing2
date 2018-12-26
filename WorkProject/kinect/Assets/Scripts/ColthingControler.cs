@@ -12,7 +12,7 @@ public class ColthingControler : MonoBehaviour
     public Image guiHandCursor;
     private Image cursorProgressBar;
     private bool interactionInited = false;
-    public  Sprite[] ColthingSprite;
+    public Sprite[] ColthingSprite;
     // Use this for initialization
     void Start()
     {
@@ -21,32 +21,24 @@ public class ColthingControler : MonoBehaviour
         cursorProgressBar = objProgressBar ? objProgressBar.GetComponent<Image>() : null;
 
         interactionInited = true;//初始化完毕
-
-        // try to automatically detect the available interaction listeners in the scene
-        //尝试自动检测场景中可用的交互侦听器
-        //if (interactionListeners.Count == 0)
-        //{
-        //    MonoBehaviour[] monoScripts = FindObjectsOfType(typeof(MonoBehaviour)) as MonoBehaviour[];
-
-        //    foreach (MonoBehaviour monoScript in monoScripts)
-        //    {
-        //        //				if(typeof(InteractionListenerInterface).IsAssignableFrom(monoScript.GetType()) &&
-        //        //					monoScript.enabled)
-        //        if ((monoScript is InteractionListenerInterface) && monoScript.enabled)
-        //        {
-        //            interactionListeners.Add(monoScript);
-        //        }
-        //    }
-        //}
-
+        
     }
     private Vector3 rightHandScreenPos = Vector3.zero;
     private Vector3 cursorScreenPos = Vector3.zero;
     [Tooltip("Smooth factor for cursor movement.")]
     public float smoothFactor = 10f;
+    private int num = 0;
+    public GameObject gameObject;
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            num++;
+
+            gameObject.SetActive(num % 2 == 0);
+
+        }
         KinectManager kinectManager = KinectManager.Instance;
 
         // update Kinect interaction
@@ -57,19 +49,9 @@ public class ColthingControler : MonoBehaviour
 
             if (playerUserID != 0)
             {
-                 GetHandOverlayScreenPos(kinectManager, (int)KinectInterop.JointType.SpineBase, ref rightHandScreenPos) ;
-                float smooth = smoothFactor * Time.deltaTime;
-                if (smooth == 0f) smooth = 1f;
-                cursorScreenPos = Vector3.Lerp(cursorScreenPos, rightHandScreenPos, smooth);
-                Rect rectCanvas = guiHandCursor.canvas.pixelRect;
-                Vector2 posSprite;
-                posSprite = new Vector2(cursorScreenPos.x * rectCanvas.width, cursorScreenPos.y * rectCanvas.height);
-                guiHandCursor.rectTransform.position = posSprite;
-                Vector3 userPostion = kinectManager.GetUserPosition(playerUserID);
-                // Debug.Log(userPostion);
-                guiHandCursor.rectTransform.localScale = new Vector3(2.7f, 2.7f, 2.7f) / userPostion.z;
+                bool buer = GetHandOverlayScreenPos(kinectManager, (int)KinectInterop.JointType.SpineBase, ref rightHandScreenPos);
             }
-          
+
         }
     }
     private bool GetHandOverlayScreenPos(KinectManager kinectManager, int iHandJointIndex, ref Vector3 handScreenPos)
@@ -106,7 +88,9 @@ public class ColthingControler : MonoBehaviour
                     handScreenPos.y = 1f - yScaled;
 
                     return true;
+
                 }
+
             }
         }
 

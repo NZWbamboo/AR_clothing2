@@ -104,7 +104,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Demigiant\DOTweenPro\DOTweenAnimation.cs" />
-    <Compile Include="Assets\KinectLR\KinectDemos\FittingRoomDemo\Scripts\CategorySelector.cs" />
     <Compile Include="Assets\KinectLR\KinectDemos\FittingRoomDemo\Scripts\CloudFaceScripts\CloudFaceDetector.cs" />
     <Compile Include="Assets\KinectLR\KinectDemos\FittingRoomDemo\Scripts\CloudFaceScripts\CloudFaceManager.cs" />
     <Compile Include="Assets\KinectLR\KinectDemos\FittingRoomDemo\Scripts\CloudFaceScripts\CloudWebTools.cs" />
@@ -302,6 +301,7 @@
     <Compile Include="Assets\KinectLR\Standard Assets\Windows\Kinect\Vector4.cs" />
     <Compile Include="Assets\Scripts\ButtonScript.cs" />
     <Compile Include="Assets\Scripts\ColthingControler.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\ScaleChange.cs" />
     <Compile Include="Assets\Scripts\Showpeop.cs" />
     <Compile Include="Assets\Scripts\moveBall.cs" />

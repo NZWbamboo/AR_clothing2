@@ -10,31 +10,60 @@ public class UserBodyBlender : MonoBehaviour
     //用于渲染场景背景的摄像机。当启用此组件时，背景摄像机将被禁用。
     [Tooltip("Camera used to render the scene background. The background camera gets disabled, when this component is enabled.")]
 	public Camera backroundCamera;
-
+    /// <summary>
+    /// 用于混合的材质
+    /// </summary>
 	private Material userBlendMat;
+    /// <summary>
+    /// km实例
+    /// </summary>
 	private KinectManager kinectManager;
+    /// <summary>
+    /// 深度帧最后一帧的时间
+    /// </summary>
 	private long lastDepthFrameTime;
 
+    /// <summary>
+    /// RGB转深度坐标
+    /// </summary>
 	private Vector2[] color2DepthCoords;
+    /// <summary>
+    /// RGB转深度缓冲区
+    /// </summary>
 	private ComputeBuffer color2DepthBuffer;
 
+    /// <summary>
+    /// 深度图片缓冲数据
+    /// </summary>
 	private float[] depthImageBufferData;
+    /// <summary>
+    /// 深度图片缓冲
+    /// </summary>
 	private ComputeBuffer depthImageBuffer;
 
+    /// <summary>
+    /// shaderUVrect
+    /// </summary>
 	private Rect shaderUvRect = new Rect(0, 0, 1, 1);
+    /// <summary>
+    /// shaderRect初始化
+    /// </summary>
 	private bool shaderRectInited = false;
 
 	//private float depthFactor = 1f;
-
+    /// <summary>
+    /// 
+    /// </summary>
 	private RenderTexture copyToTex;
 
 
-	// sets texture to copy to
-	/// <summary>
-	/// Sets the texture to copy the camera image to.
-	/// </summary>
-	/// <param name="tex">The target texture</param>
-	public void SetCopyToTexture(RenderTexture tex)
+    // sets texture to copy to
+    /// <summary>
+    /// 设置要复制相机图像的纹理。
+    /// Sets the texture to copy the camera image to.
+    /// </summary>
+    /// <param name="tex">The target texture</param>
+    public void SetCopyToTexture(RenderTexture tex)
 	{
 		copyToTex = tex;
 	}
