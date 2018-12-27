@@ -286,7 +286,7 @@ public class ModelSelector : MonoBehaviour
         }
 
         scaler.foregroundCamera = foregroundCamera;
-        //scaler.debugText = debugText;
+      
 
         scaler.Start();
     }

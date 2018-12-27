@@ -6,10 +6,10 @@ using DG.Tweening;
 
 public class ButtonScript : MonoBehaviour
 {
-   
+
     public int Clothing_categories;//0为男,1为女,2为卡通   -1不为衣服种类
     public ModelSelector modelSelector;
-   // public ColthingControler instence;       
+    // public ColthingControler instence;       
     ParticleSystem toonMacige;               //粒子控制器
     public string fileName;                  //模型的文件夹
     [Tooltip("本类模型的总数量")]
@@ -18,18 +18,22 @@ public class ButtonScript : MonoBehaviour
     private static string selector;          //当前选择的模型列表
     private int modelIndex;                  //模型索引
     float time = 0;                          //时间
-    
+
     // Use this for initialization
     void Start()
     {
         toonMacige = transform.parent.parent.Find("ToonMagic").GetComponent<ParticleSystem>();
         KinectManager KM = KinectManager.Instance;
         modelSelector = KM.gameObject.GetComponent<ModelSelector>();
-        this.transform.GetChild(2).GetComponent<Toggle>().onValueChanged.AddListener((ison) => { Selected(ison); });
+        //this.transform.GetChild(2).GetComponent<Toggle>().onValueChanged.AddListener((Ison) => { Selected(Ison); });
     }
-    void Selected(bool ison)
+    public void Selected(bool ison)
     {
         this.transform.GetChild(2).GetComponent<Image>().enabled = ison;
+        //if (ison)
+        //{
+        //    return;
+        //}
         if (ison && this.Clothing_categories >= 0)
         {
             selector = this.fileName;         //令当前选择的模型列表为选中的文件夹里的内容
@@ -38,18 +42,16 @@ public class ButtonScript : MonoBehaviour
             this.transform.GetChild(0).transform.localScale = Vector3.one;
             this.transform.GetChild(1).transform.localScale = Vector3.one;
             this.transform.GetChild(3).transform.localScale = Vector3.one;
-            this.transform.GetChild(2).GetComponent<Toggle>().isOn = true;
+            // this.transform.GetChild(2).GetComponent<Toggle>().isOn = true;
             this.transform.GetChild(1).GetComponent<Image>().enabled = false;
             this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 0;
             time = 0;
             //TODO 选中按钮的操作
             modelIndex = Random.Range(0, selectorcount);
             //  Debug.Log(selector);
+            Debug.Log("选择");
             modelSelector.OnDressingItemSelected(modelIndex, selector);
         }
-
-
-
     }
 
     // Update is called once per frame
@@ -85,6 +87,7 @@ public class ButtonScript : MonoBehaviour
 
                     if (time > 2)
                     {
+                        Debug.Log("haha");
                         this.transform.GetChild(2).GetComponent<Toggle>().isOn = true;
                     }
                 }
@@ -131,7 +134,7 @@ public class ButtonScript : MonoBehaviour
                     modelIndex--;//令选中的索引加一
                     if (modelIndex < 0)
                         modelIndex = selectorcount - 1;
-                     Debug.Log(modelIndex + " 1  " + selector + "  2 " + selectorcount);
+                    Debug.Log(modelIndex + " 1  " + selector + "  2 " + selectorcount);
                     modelSelector.OnDressingItemSelected(modelIndex, selector);
 
                 }
