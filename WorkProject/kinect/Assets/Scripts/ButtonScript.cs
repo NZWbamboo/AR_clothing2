@@ -16,7 +16,7 @@ public class ButtonScript : MonoBehaviour
     public int mouldCount;                   //模型的数量
     private static int selectorcount;        //当前选择的模型的最大数量
     private static string selector;          //当前选择的模型列表
-    private int modelIndex;                  //模型索引
+    private static int modelIndex;                  //模型索引
     float time = 0;                          //时间
 
     // Use this for initialization
@@ -38,22 +38,65 @@ public class ButtonScript : MonoBehaviour
         {
             selector = this.fileName;         //令当前选择的模型列表为选中的文件夹里的内容
             selectorcount = this.mouldCount;  //令当前选择的模型列表的最大数量为选中种类的最大数量
-            toonMacige.Play();
-            this.transform.GetChild(0).transform.localScale = Vector3.one;
-            this.transform.GetChild(1).transform.localScale = Vector3.one;
-            this.transform.GetChild(3).transform.localScale = Vector3.one;
-            // this.transform.GetChild(2).GetComponent<Toggle>().isOn = true;
-            this.transform.GetChild(1).GetComponent<Image>().enabled = false;
-            this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 0;
-            time = 0;
+            SelectedState();//选中后UI更改的状态
             //TODO 选中按钮的操作
-            modelIndex = Random.Range(0, selectorcount);
-            //  Debug.Log(selector);
+            modelIndex = Random.Range(0, selectorcount); //当前选项范围的随机衣服.
+
             Debug.Log("选择");
-            modelSelector.OnDressingItemSelected(modelIndex, selector);
+
+            StartCoroutine(LoadModel());//延迟加载服装
         }
     }
+    IEnumerator LoadModel()
+    {
+        switch (selector)
+        {
+            case "woman":
+                switch (modelIndex)
+                {
+                    case 0:
+                        Adaptation(-0.041f, 0.101f, 1.11f, 0.88f, 1.04f, 0.84f);
+                        break;
+                    case 1:
+                        Adaptation(0.076f, 0.107f, 1.04f, 0.84f, 0.74f, 0.57f);
+                        break;
+                    case 2:
+                        Adaptation(0.056f, 0.01f, 1.05f, 1.05f, 1f, 0.9f);
+                        break;
+                    case 3:
+                        Adaptation(0f, 0f, 1.05f, 1.05f, 1f, 0.9f);
+                        break;
+                    case 4:
+                        Adaptation(0f, 0f, 1.05f, 1.05f, 1f, 0.9f);
+                        break;
+                    case 5:
+                        Adaptation(0.077f, 0.129f, 1.05f, 0.97f, 1.01f, 1.19f);
+                        break;
+                    case 6:
+                        Adaptation(0.02f, 0.071f, 1.15f, 0.92f, 0.99f, 0.91f);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                Adaptation(0f, 0f, 1.05f, 1.05f, 1f, 0.9f);
+                break;
+        }
+        yield return new WaitForSeconds(0.3f);
 
+        modelSelector.OnDressingItemSelected(modelIndex, selector);
+    }
+
+    void Adaptation(float vertical, float forward, float bodyScale, float bodyWidth, float armScale, float legScale)
+    {
+        modelSelector.verticalOffset = vertical;
+        modelSelector.forwardOffset = forward;
+        modelSelector.bodyScaleFactor = bodyScale;
+        modelSelector.bodyWidthFactor = bodyWidth;
+        modelSelector.armScaleFactor = armScale;
+        modelSelector.legScaleFactor = legScale;
+    }
     // Update is called once per frame
 
 
@@ -99,21 +142,16 @@ public class ButtonScript : MonoBehaviour
                 this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = time * 0.5f;
                 if (time > 2)
                 {
-                    toonMacige.Play();
-                    this.transform.GetChild(0).transform.localScale = Vector3.one;
-                    this.transform.GetChild(1).transform.localScale = Vector3.one;
-                    this.transform.GetChild(3).transform.localScale = Vector3.one;
                     this.transform.GetChild(2).GetComponent<Toggle>().isOn = true;
-                    this.transform.GetChild(1).GetComponent<Image>().enabled = false;
-                    this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 0;
-                    time = 0;
-                    //TODO 选中按钮的操作
 
-                    modelIndex++;//令选中的索引加一
+                    SelectedState();//选中后UI更改的状态
+
+                    //TODO 选中按钮的操作
+                    modelIndex += 1;//令选中的索引加一
                     if (modelIndex >= selectorcount)
                         modelIndex = 0;//如果超出索引则循环
-                    Debug.Log(modelIndex + " 1  " + selector + "  2 " + selectorcount);
-                    modelSelector.OnDressingItemSelected(modelIndex, selector);
+                    Debug.Log(modelIndex + " 1 上 " + selector + "  2 " + selectorcount);
+                    StartCoroutine(LoadModel());
                 }
                 break;
             case -2://下一个
@@ -122,20 +160,15 @@ public class ButtonScript : MonoBehaviour
                 this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = time * 0.5f;
                 if (time > 2)
                 {
-                    toonMacige.Play();
-                    this.transform.GetChild(0).transform.localScale = Vector3.one;
-                    this.transform.GetChild(1).transform.localScale = Vector3.one;
-                    this.transform.GetChild(3).transform.localScale = Vector3.one;
+                    SelectedState();//选中后UI更改的状态
+
                     this.transform.GetChild(2).GetComponent<Toggle>().isOn = true;
-                    this.transform.GetChild(1).GetComponent<Image>().enabled = false;
-                    this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 0;
-                    time = 0;
                     //TODO 选中按钮的操作
-                    modelIndex--;//令选中的索引加一
+                    modelIndex += -1;//令选中的索引加一
                     if (modelIndex < 0)
                         modelIndex = selectorcount - 1;
-                    Debug.Log(modelIndex + " 1  " + selector + "  2 " + selectorcount);
-                    modelSelector.OnDressingItemSelected(modelIndex, selector);
+                    Debug.Log(modelIndex + " -1 下 " + selector + "  2 " + selectorcount);
+                    StartCoroutine(LoadModel());
 
                 }
                 break;
@@ -145,11 +178,21 @@ public class ButtonScript : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
+        time = 0;
         this.transform.GetChild(0).localScale = new Vector3(1f, 1f, 1);
         this.transform.GetChild(1).localScale = new Vector3(1f, 1f, 1);
         this.transform.GetChild(3).localScale = new Vector3(1f, 1f, 1);
         this.transform.GetChild(1).GetComponent<Image>().enabled = false;
         this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 0;
     }
-
+    private void SelectedState()
+    {
+        toonMacige.Play();
+        this.transform.GetChild(0).transform.localScale = Vector3.one;
+        this.transform.GetChild(1).transform.localScale = Vector3.one;
+        this.transform.GetChild(3).transform.localScale = Vector3.one;
+        this.transform.GetChild(1).GetComponent<Image>().enabled = false;
+        this.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 0;
+        time = 0;
+    }
 }

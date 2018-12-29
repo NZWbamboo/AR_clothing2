@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/KinectLR/KinectDemos/FittingRoomDemo/KinectFittingRoom1.unity
+- path: Assets/Scene/KinectFittingRoom1.unity
   isLoaded: 1
   isActive: 1

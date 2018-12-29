@@ -55,7 +55,7 @@ public class ModelSelector : MonoBehaviour
     //这个模型选择器的最大年龄过滤器。
     [Tooltip("Maximum age filter of this model selector.")]
     public float maximumAge = 1000;
-
+    public GameObject Tip;
 
     [HideInInspector]
     public bool activeSelector = true;
@@ -105,13 +105,15 @@ public class ModelSelector : MonoBehaviour
     {
 
 
-        if (!GetJointOverlayScreenPos(kinectManager, (int)KinectInterop.JointType.SpineBase, ref rightHandScreenPos))//如果脊椎关节在屏幕里
+        if (!GetJointOverlayScreenPos(kinectManager, (int)KinectInterop.JointType.SpineBase, ref rightHandScreenPos)&& !GetJointOverlayScreenPos(kinectManager, (int)KinectInterop.JointType.SpineMid, ref rightHandScreenPos))//如果脊椎关节在屏幕里
         {
+            Tip.SetActive(true);
             GameObject.Destroy(selModel);
             LoadModel = true;
         }
         else if (selModel == null && LoadModel)//如果
         {
+            Tip.SetActive(false);
             int selectedFileName = Random.Range(0, 3);
             string FileName = null;
             switch (selectedFileName)
